@@ -62,11 +62,6 @@ class PulseScanner:
 
     def check_version(self, target):
 
-        if self.outputFile:
-            outfile = open(f"{self.outputFile}_resume", 'a')
-        else:
-            outfile = None
-
         target = target.rstrip('\n')
         if self._v:
             print(f"{Fore.LIGHTBLACK_EX}[-] Trying {target}...{Fore.RESET}")
@@ -98,6 +93,12 @@ class PulseScanner:
             return False
 
         if req.status_code == 200:
+
+            if self.outputFile:
+                outfile = open(f"{self.outputFile}_resume", 'a')
+            else:
+                outfile = None
+
             if self._v:
                 print(f"{Fore.LIGHTCYAN_EX}[!] Got a 200 response code for {target}.{Fore.RESET}")
             try:
@@ -212,14 +213,16 @@ class PulseScanner:
             slice_no = lines.index(json.loads(last_entry)['host'] + '\n')
             # Seek to the last discovered entry in the resume file.
             lines = lines[slice_no:]
+            rf.close()
         else:
             with open(self.targetList, 'r') as f:
                 lines = f.readlines()
 
+        f.close()
+
         for _ in tqdm.tqdm(p.imap_unordered(self.check_version, lines), total=len(lines)):
             if _:
                 self._results["scan_results"].append(_)
-        f.close()
 
         if self.outputFile:
             with open(self.outputFile, "w") as wf:
