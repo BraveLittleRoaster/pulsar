@@ -40,7 +40,7 @@ class PulseScanner:
             '7.1.10.21187', '7.4.0.28485', '8.1.4.37085', '8.1.3.36361', '7.2.0.20761', '6.3.0.14121', '7.1.11.21451',
             '7.1.0.19525', '8.1.5.38093', '7.4.0.38293', '7.3.0.30333', '7.2.0.23551', '7.0.0.18107', '6.5.0.16339',
             '7.0.0.18107', '7.1.0.19757', '8.0.1.27973', '7.1.8.20737', '6.5.0.16789', '7.0.0.17289', '6.5.0.14951',
-            '7.1.0.17675', '7.2.0.20645', '7.2.0.22071', '7.1.18.29707', '7.2.0.21017', '6.2.0.14529'
+            '7.1.0.17675', '7.2.0.20645', '7.2.0.22071', '7.1.18.29707', '7.2.0.21017', '6.2.0.14529', '6.4.0.14811'
         ]
         self._v = kwargs.get('v')
         self.outputFile = kwargs.get('outputFile')
@@ -150,8 +150,6 @@ class PulseScanner:
                         if outfile:
                             outfile.write(json.dumps(result) + '\n')
                             outfile.close()
-                        if self._dump:
-                            self.dump(target)
                         return result
                     else:
                         print(f"{Fore.LIGHTMAGENTA_EX}[!] {target} is an UNKNOWN VERSION!{Fore.RESET}")
@@ -178,7 +176,8 @@ class PulseScanner:
                             outfile.close()
                         return result
             else:
-                print(f"{Fore.LIGHTBLACK_EX}[-] {target} is not an instance.{Fore.RESET}")
+                if self._v:
+                    print(f"{Fore.LIGHTBLACK_EX}[-] {target} is not an instance.{Fore.RESET}")
                 return False
 
         else:
