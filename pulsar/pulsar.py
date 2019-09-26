@@ -226,7 +226,7 @@ class PulseScanner:
         if self.outputFile:
             with open(self.outputFile, "w") as wf:
                 wf.write(json.dumps(self._results))
-        wf.close()
+            wf.close()
 
         if self.getUnknowns:
             self.get_unknowns()
