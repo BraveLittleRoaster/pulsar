@@ -24,7 +24,8 @@ class PulseScanner:
             '9.0.3.64014', '9.0.2.63975', '8.2.5.53349', '8.2.5.50797', '8.2.1.42861', '8.3.1.51879', '8.2.3.46931',
             '8.2.9.58917', '8.3.3.58545', '8.2.11.63995', '8.2.7.54521', '9.0.5.64107', '8.3.6.64989', '9.0.3.64041',
             '8.2.8.57583', '8.2.2.44173', '9.0.3.64025', '9.0.2.63965', '8.2.12.63999', '8.2.3.46007', '9.0.3.64029',
-            '9.0.3.63979', '9.0.3.64047', '9.0.1.64487', '8.3.4.61083', '8.3.1.53359', '9.0.2.63993', '8.2.4.47329'
+            '9.0.3.63979', '9.0.3.64047', '9.0.1.64487', '8.3.4.61083', '8.3.1.53359', '9.0.2.63993', '8.2.4.47329',
+            '8.3.1.60795'
         ]
         self.not_vuln = [
             '8.0.3.30597', '9.0.3.64053', '9.0.4.64091', '7.1.12.21827', '8.0.8.33771', '8.0.4.31069', '6.5.0.15991',
@@ -77,7 +78,7 @@ class PulseScanner:
             if self._v:
                 print(f"{Fore.LIGHTBLACK_EX}[!] Max retries exceeded for {target}. Skipping...{Fore.RESET}")
             return False
-        except (ConnectionError, ssl.SSLError):
+        except (ConnectionError, ssl.SSLError, ValueError):
             return False
         except requests.exceptions.InvalidURL:
             if self._v:
@@ -87,7 +88,7 @@ class PulseScanner:
             if self._v:
                 print(f"{Fore.LIGHTBLACK_EX}[!] Unicode Error for: {target}. Skipping. Error:{err}{Fore.RESET}")
             return False
-        except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ContentDecodingError) as err:
+        except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ContentDecodingError, AttributeError) as err:
             if self._v:
                 print(f"{Fore.LIGHTBLACK_EX}[!] Encoding Error for: {target}. Skipping. Error:{err}{Fore.RESET}")
             return False
@@ -275,7 +276,7 @@ def main():
                         help="JSON output file of results.")
     parser.add_argument("-t", "--threads", action='store', default=100, help="Number of threads (default: 100)")
     parser.add_argument("-u", "--unknown", dest="unknowns", action='store_true', default=False, help="Check to see if the unknown version numbers are vulnerable.")
-    parser.add_argument("--timeout", action='store', default=30, help="Adjust the timeout (may affect scan accuracy).")
+    parser.add_argument("--timeout", action='store', default=20, help="Adjust the timeout (may affect scan accuracy).")
     parser.add_argument("--check-anyway", dest='checkAnyway', default=False, action="store_true", help="Check if vulnerable anyways.")
     parser.add_argument("-d", "--dump", dest="dump", default=False, action="store_true", help="Dump files off the vulnerable VPN.")
     parser.add_argument("-r", "--resume", dest="resume", action="store", help="Location of resume file to restart scan.")
