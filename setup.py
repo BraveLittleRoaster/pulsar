@@ -14,7 +14,7 @@ setup(
     url="https://github.com/BraveLittleRoaster/pulsar/tree/master/pulsar",
     packages=['pulsar'],
     entry_points={'console_scripts': ['pulsar=pulsar.pulsar:main']},
-    install_requres=DEPENDENCIES,
+    install_requires=DEPENDENCIES,
     keywords=['security', 'network', 'hacking', 'Pulse Connect Secure', 'vpn', 'pulse vpn'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
